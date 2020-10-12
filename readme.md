@@ -17,7 +17,7 @@ paste this script in the console, and let it do the work.
 The script you need to paste (minified):
 
 ```
-const maxScrollDownAttempt=3,delay=2,maxFollowed=400;var alreadyFollowed=[];function findDomElementsByText(o,l){return Array.prototype.filter.call(document.querySelectorAll(o),function(o){return l.trim()==o.textContent.trim()})}function getElementName(o){return o.parentElement.parentElement.parentElement.parentElement.previousSibling.textContent}function getFollowButtons(){return findDomElementsByText("div>span>span","Follow")}function scrollDown(){window.scrollTo(0,document.body.scrollHeight)}function clickFollow(o){o.scrollIntoView(),o.click()}function followChain(o=null,l=0){alreadyFollowed.length!=maxFollowed?l!=maxScrollDownAttempt?(null==o&&(console.log("No buttons, finding new ones."),o=getFollowButtons()),0==o.length?(console.log("Couldn't find any new button. Scrolling down"),scrollDown(),setTimeout(function(){followChain(null,l+1)},1e3*delay)):(buttonToClick=o[0],entityName=getElementName(buttonToClick),console.log("Following "+entityName),alreadyFollowed.includes(entityName)?(console.log("The element was supossed to be already followed. Twitter may be blocking."),l+=1):l=0,clickFollow(buttonToClick),buttonsRemaining=o.slice(1),setTimeout(function(){followChain(buttonsRemaining,0)},1e3*delay))):console.log("Finished due to reached attempt "+l):console.log("Already followed max amount "+maxFollowed)}followChain();
+const maxScrollDownAttempt=3,delay=2,maxFollowed=400;var alreadyFollowed=[];function findDomElementsByText(o,l){return Array.prototype.filter.call(document.querySelectorAll(o),function(o){return l.trim()==o.textContent.trim()})}function getElementName(o){return o.parentElement.parentElement.parentElement.parentElement.previousSibling.textContent}function getFollowButtons(){return findDomElementsByText("div>span>span","Follow")}function scrollDown(){window.scrollTo(0,document.body.scrollHeight)}function clickFollow(o){o.scrollIntoView(),o.click()}function followChain(o=null,l=0){alreadyFollowed.length!=maxFollowed?l!=maxScrollDownAttempt?(null!=o&&0!=o.length||(console.log("No buttons, finding new ones."),o=getFollowButtons()),0==o.length?(console.log("Couldn't find any new button. Scrolling down"),scrollDown(),setTimeout(function(){followChain(null,l+1)},1e3*delay)):(buttonToClick=o[0],entityName=getElementName(buttonToClick),console.log("Following "+entityName),alreadyFollowed.includes(entityName)?(console.log("The element was supossed to be already followed. Twitter may be blocking."),l+=1):l=0,clickFollow(buttonToClick),buttonsRemaining=o.slice(1),setTimeout(function(){followChain(buttonsRemaining,0)},1e3*delay))):console.log("Finished due to reached attempt "+l):console.log("Already followed max amount "+maxFollowed)}followChain();
 ```
 
 The full script:
@@ -60,7 +60,7 @@ function followChain(buttons=null, attempt=0){
         console.log("Finished due to reached attempt " + attempt);
         return;
     }
-    if(buttons==null){
+    if(buttons==null || buttons.length==0){
         console.log("No buttons, finding new ones.")
         buttons = getFollowButtons();
     }
